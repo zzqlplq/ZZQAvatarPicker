@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "ZZQAvatarPicker/ZZQAvatarPicker.h"
+#import "ZZQAvatarPicker.h"
 
 @interface ViewController ()
 
