@@ -11,8 +11,6 @@
 
 @interface ViewController ()
 
-@property (nonatomic, strong) ZZQAvatarPicker *picker;
-
 @end
 
 @implementation ViewController
@@ -29,10 +27,7 @@
 
 
 - (void)btnClick:(UIButton *)sender {
-
-    self.picker = [[ZZQAvatarPicker alloc] init];
-    
-    [self.picker startSelected:^(UIImage * _Nonnull image) {
+    [ZZQAvatarPicker startSelected:^(UIImage * _Nonnull image) {
         if (image) {
             [sender setImage:image forState:UIControlStateNormal];
         }

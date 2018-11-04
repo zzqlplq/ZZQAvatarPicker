@@ -51,12 +51,12 @@
 		1D5BC732218C3123002BFDC7 /* ZZQAvatarPicker */ = {
 			isa = PBXGroup;
 			children = (
-				1D5BC733218C3123002BFDC7 /* ZZQAuthorizationManager.m */,
+				1D5BC738218C3123002BFDC7 /* ZZQAvatarPicker.h */,
 				1D5BC734218C3123002BFDC7 /* ZZQAvatarPicker.m */,
+				1D5BC737218C3123002BFDC7 /* ZZQResourceSheetView.h */,
 				1D5BC735218C3123002BFDC7 /* ZZQResourceSheetView.m */,
 				1D5BC736218C3123002BFDC7 /* ZZQAuthorizationManager.h */,
-				1D5BC737218C3123002BFDC7 /* ZZQResourceSheetView.h */,
-				1D5BC738218C3123002BFDC7 /* ZZQAvatarPicker.h */,
+				1D5BC733218C3123002BFDC7 /* ZZQAuthorizationManager.m */,
 			);
 			path = ZZQAvatarPicker;
 			sourceTree = SOURCE_ROOT;

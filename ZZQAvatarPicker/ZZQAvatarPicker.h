@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZZQAvatarPicker : NSObject
 
-- (void)startSelected:(void(^)(UIImage *image))compleiton;
++ (void)startSelected:(void(^)(UIImage *image))compleiton;
 
 @end
 

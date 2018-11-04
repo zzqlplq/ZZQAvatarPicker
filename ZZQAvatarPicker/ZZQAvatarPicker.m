@@ -26,11 +26,52 @@ ZZQResouceSheetViewDelegate>
 
 @implementation ZZQAvatarPicker
 
++ (void)startSelected:(void(^)(UIImage *image))compleiton {
+      [[self new] startSelected:^(UIImage * _Nonnull image) {
+        compleiton(image);
+    }];
+}
+
+
+
 - (void)startSelected:(void (^)(UIImage * _Nonnull))compleiton {
     [self.toolView show];
     self.selectedImage = compleiton;
 }
 
+
+- (void)handleSelectedMode:(ResourceMode)resourceMode {
+   
+    if (resourceMode == ResourceModeNone) {
+        self.selectedImage ? self.selectedImage(nil) : nil;
+        return;
+    }
+    
+    if (resourceMode == ResourceModeAlbum) {
+        self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        __weak typeof(self) weakSelf = self;
+        [ZZQAuthorizationManager checkPhotoLibraryAuthorization:^(BOOL isPermission) {
+            if (isPermission) {
+                [weakSelf presentToImagePicker];
+            } else {
+                [ZZQAuthorizationManager requestPhotoLibraryAuthorization];
+            }
+        }];
+        
+    } else if (resourceMode == ResourceModeCamera) {
+        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
+        
+        __weak typeof(self) weakSelf = self;
+        [ZZQAuthorizationManager checkCameraAuthorization:^(BOOL isPermission) {
+            if (isPermission) {
+                [weakSelf presentToImagePicker];
+            } else {
+                [ZZQAuthorizationManager requestCameraAuthorization];
+            }
+        }];
+    }
+}
 
 #pragma mark - <ZZQResouceSheetViewDelegate>
 
@@ -109,6 +150,11 @@ ZZQResouceSheetViewDelegate>
         _toolView.delegate = self;
     }
     return _toolView;
+}
+
+
+- (void)dealloc {
+    NSLog(@"picker dealloc");
 }
 
 @end

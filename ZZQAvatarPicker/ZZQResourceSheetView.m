@@ -40,14 +40,6 @@ UIGestureRecognizerDelegate>
 }
 
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        [self commonInit];
-    }
-    return self;
-}
-
-
 - (void)commonInit {
     [self addSubviews];
     [self makeSubviewsLayout];
@@ -78,7 +70,6 @@ UIGestureRecognizerDelegate>
     }
     return count;
 }
-
 
 
 - (void)show {
@@ -114,6 +105,8 @@ UIGestureRecognizerDelegate>
     [UIView animateWithDuration:0.2 animations:^{
         self.bgView.alpha = 0.f;
     } completion:^(BOOL finished) {
+        self.delegate = nil;
+        [self removeFromSuperview];
         [self.bgView removeFromSuperview];
     }];
 }
@@ -213,7 +206,7 @@ UIGestureRecognizerDelegate>
     ResourceMode mode = [self.resourceFroms[indexPath.section][indexPath.row] integerValue];
     if ([self.delegate respondsToSelector:@selector(ZZQResourceSheetView:seletedMode:)]) {
         [self.delegate ZZQResourceSheetView:self seletedMode:mode];
-    }
+    }    
     [self hide];
 }
 
@@ -266,6 +259,8 @@ UIGestureRecognizerDelegate>
 }
 
 
-
+- (void)dealloc {
+    NSLog(@"sheet view dealloc");
+}
 
 @end

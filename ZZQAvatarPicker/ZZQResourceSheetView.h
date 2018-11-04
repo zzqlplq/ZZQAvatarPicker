@@ -24,10 +24,10 @@ typedef NS_ENUM(NSInteger, ResourceMode) {
                  seletedMode:(ResourceMode)resourceMode;
 @end
 
-
 @interface ZZQResourceSheetView : UIView
 
-@property (nonatomic, weak) id<ZZQResouceSheetViewDelegate> delegate;
+// 持有强引用，调用接收后，手动置为空，不然 ZZQAvatarPicker 会提前释放
+@property (nonatomic, strong, nullable) id<ZZQResouceSheetViewDelegate> delegate;
 
 - (void)show;
 
