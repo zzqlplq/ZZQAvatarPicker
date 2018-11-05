@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D0AA84E21900C82009FB9B8 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D0AA84D21900C82009FB9B8 /* Default-568h@2x.png */; };
 		1D5BC739218C3123002BFDC7 /* ZZQAuthorizationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D5BC733218C3123002BFDC7 /* ZZQAuthorizationManager.m */; };
 		1D5BC73A218C3123002BFDC7 /* ZZQAvatarPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D5BC734218C3123002BFDC7 /* ZZQAvatarPicker.m */; };
 		1D5BC73B218C3123002BFDC7 /* ZZQResourceSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D5BC735218C3123002BFDC7 /* ZZQResourceSheetView.m */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1D0AA84D21900C82009FB9B8 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		1D5BC733218C3123002BFDC7 /* ZZQAuthorizationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZQAuthorizationManager.m; sourceTree = "<group>"; };
 		1D5BC734218C3123002BFDC7 /* ZZQAvatarPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZQAvatarPicker.m; sourceTree = "<group>"; };
 		1D5BC735218C3123002BFDC7 /* ZZQResourceSheetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZQResourceSheetView.m; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 		1DFD834E2189CE900033DE2A = {
 			isa = PBXGroup;
 			children = (
+				1D0AA84D21900C82009FB9B8 /* Default-568h@2x.png */,
 				1DFD83592189CE900033DE2A /* ZZQAvatarPickerDemo */,
 				1DFD83582189CE900033DE2A /* Products */,
 			);
@@ -152,6 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DFD83672189CE910033DE2A /* LaunchScreen.storyboard in Resources */,
+				1D0AA84E21900C82009FB9B8 /* Default-568h@2x.png in Resources */,
 				1DFD83642189CE910033DE2A /* Assets.xcassets in Resources */,
 				1DFD83622189CE900033DE2A /* Main.storyboard in Resources */,
 			);

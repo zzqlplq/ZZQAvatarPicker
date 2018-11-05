@@ -33,45 +33,11 @@ ZZQResouceSheetViewDelegate>
 }
 
 
-
 - (void)startSelected:(void (^)(UIImage * _Nonnull))compleiton {
     [self.toolView show];
     self.selectedImage = compleiton;
 }
 
-
-- (void)handleSelectedMode:(ResourceMode)resourceMode {
-   
-    if (resourceMode == ResourceModeNone) {
-        self.selectedImage ? self.selectedImage(nil) : nil;
-        return;
-    }
-    
-    if (resourceMode == ResourceModeAlbum) {
-        self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        __weak typeof(self) weakSelf = self;
-        [ZZQAuthorizationManager checkPhotoLibraryAuthorization:^(BOOL isPermission) {
-            if (isPermission) {
-                [weakSelf presentToImagePicker];
-            } else {
-                [ZZQAuthorizationManager requestPhotoLibraryAuthorization];
-            }
-        }];
-        
-    } else if (resourceMode == ResourceModeCamera) {
-        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
-        
-        __weak typeof(self) weakSelf = self;
-        [ZZQAuthorizationManager checkCameraAuthorization:^(BOOL isPermission) {
-            if (isPermission) {
-                [weakSelf presentToImagePicker];
-            } else {
-                [ZZQAuthorizationManager requestCameraAuthorization];
-            }
-        }];
-    }
-}
 
 #pragma mark - <ZZQResouceSheetViewDelegate>
 
@@ -79,6 +45,7 @@ ZZQResouceSheetViewDelegate>
     
     if (resourceMode == ResourceModeNone) {
         self.selectedImage ? self.selectedImage(nil) : nil;
+        [self clean];
         return;
     }
     
@@ -122,13 +89,23 @@ ZZQResouceSheetViewDelegate>
 
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     self.selectedImage ? self.selectedImage(image) : nil;
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [self clean];
+    }];
 }
 
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     self.selectedImage ? self.selectedImage(nil) : nil;
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [self clean];
+    }];
+}
+
+
+- (void)clean {
+    self.toolView.delegate = nil;
+    self.toolView = nil;
 }
 
 

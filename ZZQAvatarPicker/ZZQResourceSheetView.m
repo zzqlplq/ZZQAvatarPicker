@@ -12,7 +12,7 @@
 #define ZZQ_ScreenHeight                  [UIScreen mainScreen].bounds.size.height
 
 static const CGFloat kDefaultCellHeight = 54;
-static const CGFloat kCancelCellTableViewHeadViewHeight = 10;
+static const CGFloat kFrontCancelTableViewCellHeight = 10;
 
 @interface ZZQResourceSheetView ()<UITableViewDelegate,
 UITableViewDataSource,
@@ -26,6 +26,7 @@ UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) NSArray *resourceDescFroms;
 
+@property (nonatomic, assign) CGFloat bottomEdge;
 
 @end
 
@@ -54,7 +55,7 @@ UIGestureRecognizerDelegate>
 
 - (void)makeSubviewsLayout {
     
-    CGFloat height = kDefaultCellHeight * [self totalCountOfResourceFroms] + kCancelCellTableViewHeadViewHeight;
+    CGFloat height = kDefaultCellHeight * [self totalCountOfResourceFroms] + kFrontCancelTableViewCellHeight + self.bottomEdge;
     self.frame = CGRectMake(0, ZZQ_ScreenHeight - height, ZZQ_ScreenWidth, height);
     self.tableView.frame = CGRectMake(0, 0, ZZQ_ScreenWidth, height);
 }
@@ -105,7 +106,6 @@ UIGestureRecognizerDelegate>
     [UIView animateWithDuration:0.2 animations:^{
         self.bgView.alpha = 0.f;
     } completion:^(BOOL finished) {
-        self.delegate = nil;
         [self removeFromSuperview];
         [self.bgView removeFromSuperview];
     }];
@@ -125,6 +125,9 @@ UIGestureRecognizerDelegate>
 #pragma mark - <UITapGestureRecognizer>
 
 - (void)tapHandle:(UIGestureRecognizer *)tap {
+    if ([self.delegate respondsToSelector:@selector(ZZQResourceSheetView:seletedMode:)]) {
+        [self.delegate ZZQResourceSheetView:self seletedMode:ResourceModeNone];
+    }
     [self hide];
 }
 
@@ -174,18 +177,19 @@ UIGestureRecognizerDelegate>
     
     UILabel *label = [cell.contentView viewWithTag:12345];
     label.text = self.resourceDescFroms[indexPath.section][indexPath.row];
-    
+
     return cell;
 }
 
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return section == 0 ? 0 : kCancelCellTableViewHeadViewHeight;
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return section == 0 ? kFrontCancelTableViewCellHeight : self.bottomEdge;
 }
 
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ZZQ_ScreenWidth, kCancelCellTableViewHeadViewHeight)];
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    
+    CGFloat height = section == 0 ? kFrontCancelTableViewCellHeight : self.bottomEdge;
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ZZQ_ScreenWidth, height)];
     header.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0f];
     return header;
 }
@@ -254,8 +258,24 @@ UIGestureRecognizerDelegate>
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.bounces = NO;
+        if (@available(iOS 11.0, *)) {
+            _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
     }
     return _tableView;
+}
+
+
+- (CGFloat)bottomEdge {
+    if (!_bottomEdge) {
+        if (@available(iOS 11.0, *)) {
+            UIEdgeInsets edge = [[[UIApplication sharedApplication] windows] firstObject].safeAreaInsets;
+            _bottomEdge = edge.bottom;
+        } else {
+            _bottomEdge = 0.f;
+        }
+    }
+    return _bottomEdge;
 }
 
 
