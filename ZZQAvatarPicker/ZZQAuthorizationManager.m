@@ -13,6 +13,51 @@
 
 @implementation ZZQAuthorizationManager
 
+
++ (void)checkAuthorization:(ZZQAuthorizationType)type completion:(void (^)(BOOL))completion {
+    
+    switch (type) {
+        case ZZQAuthorizationTypeCamera: {
+            [self checkCameraAuthorization:^(BOOL isPermission) {
+                completion(isPermission);
+            }];
+        }
+            break;
+        case ZZQAuthorizationTypePhotoLibrary: {
+            [self checkPhotoLibraryAuthorization:^(BOOL isPermission) {
+                completion(isPermission);
+            }];
+        }
+            break;
+        case ZZQAuthorizationTypeMicrophone: {
+            [self checkMicrophoneAuthorization:^(BOOL isPermission) {
+                completion(isPermission);
+            }];
+        }
+            break;
+    }
+}
+
+
++ (void)requestAuthorization:(ZZQAuthorizationType)type {
+    switch (type) {
+        case ZZQAuthorizationTypeCamera: {
+            [self requestCameraAuthorization];
+        }
+            break;
+        case ZZQAuthorizationTypePhotoLibrary: {
+            [self requestPhotoLibraryAuthorization];
+        }
+            break;
+        case ZZQAuthorizationTypeMicrophone: {
+            [self requestMicrophoneArthorization];
+        }
+            break;
+    }
+}
+
+
+
 + (void)checkCameraAuthorization:(void (^)(BOOL))completion {
     
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -99,10 +144,54 @@
 
 
 
++ (void)checkMicrophoneAuthorization:(void (^)(BOOL))completion {
+    
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
+
+    switch (authStatus) {
+        case AVAuthorizationStatusNotDetermined: {
+            //第一次提示用户授权
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+                completion ? completion(granted) : nil;
+            }];
+        }
+            break;
+            
+        case AVAuthorizationStatusAuthorized: {
+            completion ? completion(YES) : nil;
+        }
+            break;
+            
+        case AVAuthorizationStatusRestricted: {
+            completion ? completion(NO) : nil;
+        }
+            break;
+            
+        case AVAuthorizationStatusDenied: {
+            completion ? completion(NO) : nil;
+        }
+            break;
+    }
+
+}
+
+
++ (void)requestMicrophoneArthorization {
+    
+    __weak typeof (self) weakSelf = self;
+    [self checkMicrophoneAuthorization:^(BOOL isPermission) {
+        if (!isPermission) {
+            [weakSelf showSettingAlertWithAuth:@"麦克风" settingName:@"麦克风"];
+        }
+    }];
+}
+
+
+
 + (void)showSettingAlertWithAuth:(NSString *)auth settingName:(NSString *)settingName {
     
     NSString *title = [NSString stringWithFormat:@"无法使用%@",auth];
-    NSString *message = [NSString stringWithFormat:@"请在iPhone的“设置-隐私-%@”中允许访问相机", settingName];
+    NSString *message = [NSString stringWithFormat:@"请在iPhone的“设置-隐私-%@”中允许访问", settingName];
 
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     

@@ -10,15 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, ZZQAuthorizationType) {
+    ZZQAuthorizationTypeCamera,
+    ZZQAuthorizationTypePhotoLibrary,
+    ZZQAuthorizationTypeMicrophone
+};
+
+
+
 @interface ZZQAuthorizationManager : NSObject
 
-+ (void)checkCameraAuthorization:(void(^)(BOOL isPermission))completion;
++ (void)checkAuthorization:(ZZQAuthorizationType)type completion:(void(^)(BOOL isPermission))completion;
 
-+ (void)requestCameraAuthorization;
-
-+ (void)checkPhotoLibraryAuthorization:(void(^)(BOOL isPermission))completion;
-
-+ (void)requestPhotoLibraryAuthorization;
++ (void)requestAuthorization:(ZZQAuthorizationType)type;
 
 @end
 

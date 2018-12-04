@@ -52,11 +52,11 @@ ZZQResouceSheetViewDelegate>
     if (resourceMode == ResourceModeAlbum) {
         self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         __weak typeof(self) weakSelf = self;
-        [ZZQAuthorizationManager checkPhotoLibraryAuthorization:^(BOOL isPermission) {
+        [ZZQAuthorizationManager checkAuthorization:ZZQAuthorizationTypePhotoLibrary completion:^(BOOL isPermission) {
             if (isPermission) {
                 [weakSelf presentToImagePicker];
             } else {
-                [ZZQAuthorizationManager requestPhotoLibraryAuthorization];
+                [ZZQAuthorizationManager requestAuthorization:ZZQAuthorizationTypePhotoLibrary];
             }
         }];
   
@@ -65,11 +65,11 @@ ZZQResouceSheetViewDelegate>
         self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
         
         __weak typeof(self) weakSelf = self;
-        [ZZQAuthorizationManager checkCameraAuthorization:^(BOOL isPermission) {
+        [ZZQAuthorizationManager checkAuthorization:ZZQAuthorizationTypeCamera completion:^(BOOL isPermission) {
             if (isPermission) {
                 [weakSelf presentToImagePicker];
             } else {
-                [ZZQAuthorizationManager requestCameraAuthorization];
+                [ZZQAuthorizationManager requestAuthorization:ZZQAuthorizationTypeCamera];
             }
         }];
     }

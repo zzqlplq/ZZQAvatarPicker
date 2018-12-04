@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "ZZQAvatarPicker.h"
+#import "ZZQAuthorizationManager.h"
+
 
 @interface ViewController ()
 
@@ -22,11 +24,13 @@
     sender.backgroundColor = [UIColor redColor];
     [sender addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:sender];
+    
 }
 
 
 
 - (void)btnClick:(UIButton *)sender {
+    
     [ZZQAvatarPicker startSelected:^(UIImage * _Nonnull image) {
         if (image) {
             [sender setImage:image forState:UIControlStateNormal];
