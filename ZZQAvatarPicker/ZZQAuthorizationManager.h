@@ -20,7 +20,10 @@ typedef NS_ENUM(NSInteger, ZZQAuthorizationType) {
 
 @interface ZZQAuthorizationManager : NSObject
 
-+ (void)checkAuthorization:(ZZQAuthorizationType)type completion:(void(^)(BOOL isPermission))completion;
++ (void)checkAuthorization:(ZZQAuthorizationType)type
+        firstRequestAccess:(void(^ __nullable)(void))requestAccess
+                completion:(void(^)(BOOL isPermission))completion;
+
 
 + (void)requestAuthorization:(ZZQAuthorizationType)type;
 

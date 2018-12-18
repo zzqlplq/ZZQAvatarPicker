@@ -52,7 +52,7 @@ ZZQResouceSheetViewDelegate>
     if (resourceMode == ResourceModeAlbum) {
         self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         __weak typeof(self) weakSelf = self;
-        [ZZQAuthorizationManager checkAuthorization:ZZQAuthorizationTypePhotoLibrary completion:^(BOOL isPermission) {
+        [ZZQAuthorizationManager checkAuthorization:ZZQAuthorizationTypePhotoLibrary firstRequestAccess:nil completion:^(BOOL isPermission) {
             if (isPermission) {
                 [weakSelf presentToImagePicker];
             } else {
@@ -65,7 +65,7 @@ ZZQResouceSheetViewDelegate>
         self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
         
         __weak typeof(self) weakSelf = self;
-        [ZZQAuthorizationManager checkAuthorization:ZZQAuthorizationTypeCamera completion:^(BOOL isPermission) {
+        [ZZQAuthorizationManager checkAuthorization:ZZQAuthorizationTypeCamera firstRequestAccess:nil completion:^(BOOL isPermission) {
             if (isPermission) {
                 [weakSelf presentToImagePicker];
             } else {

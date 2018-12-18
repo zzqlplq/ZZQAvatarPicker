@@ -13,30 +13,40 @@
 
 @implementation ZZQAuthorizationManager
 
-
-+ (void)checkAuthorization:(ZZQAuthorizationType)type completion:(void (^)(BOOL))completion {
++ (void)checkAuthorization:(ZZQAuthorizationType)type firstRequestAccess:(void (^)(void))requestAccess completion:(void (^)(BOOL))completion {
     
     switch (type) {
         case ZZQAuthorizationTypeCamera: {
-            [self checkCameraAuthorization:^(BOOL isPermission) {
+            
+            [self checkCameraAuthorization:^{
+                requestAccess ? requestAccess() : nil;
+            } completion:^(BOOL isPermission) {
                 completion(isPermission);
             }];
         }
             break;
         case ZZQAuthorizationTypePhotoLibrary: {
-            [self checkPhotoLibraryAuthorization:^(BOOL isPermission) {
+            
+            [self checkPhotoLibraryAuthorization:^{
+                requestAccess ? requestAccess() : nil;
+            } completion:^(BOOL isPermission) {
                 completion(isPermission);
             }];
         }
             break;
         case ZZQAuthorizationTypeMicrophone: {
-            [self checkMicrophoneAuthorization:^(BOOL isPermission) {
+            
+            [self checkMicrophoneAuthorization:^{
+                requestAccess ? requestAccess() : nil;
+            } completion:^(BOOL isPermission) {
                 completion(isPermission);
             }];
         }
             break;
     }
+    
 }
+
 
 
 + (void)requestAuthorization:(ZZQAuthorizationType)type {
@@ -58,13 +68,15 @@
 
 
 
-+ (void)checkCameraAuthorization:(void (^)(BOOL))completion {
++ (void)checkCameraAuthorization:(void(^ __nullable)(void))firstRequestAccess completion:(void (^)(BOOL))completion {
     
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
 
     switch (authStatus) {
         case AVAuthorizationStatusNotDetermined: {
+
             //第一次提示用户授权
+            firstRequestAccess ? firstRequestAccess() : nil;
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
                 completion ? completion(granted) : nil;
             }];
@@ -92,22 +104,24 @@
 + (void)requestCameraAuthorization {
 
     __weak typeof (self) weakSelf = self;
-    [self checkCameraAuthorization:^(BOOL isPermission) {
+    [self checkCameraAuthorization:nil completion:^(BOOL isPermission) {
         if (!isPermission) {
             [weakSelf showSettingAlertWithAuth:@"相机" settingName:@"相机"];
         }
     }];
+
 }
 
 
 
-+ (void)checkPhotoLibraryAuthorization:(void (^)(BOOL))completion {
++ (void)checkPhotoLibraryAuthorization:(void(^ __nullable)(void))firstRequestAccess completion:(void (^)(BOOL))completion {
     
     PHAuthorizationStatus authStatus = [PHPhotoLibrary authorizationStatus];
 
     switch (authStatus) {
 
         case PHAuthorizationStatusNotDetermined: {
+            firstRequestAccess ? firstRequestAccess() : nil;
             [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
                 completion ? completion(status == PHAuthorizationStatusAuthorized) : nil;
             }];
@@ -133,9 +147,8 @@
 
 
 + (void)requestPhotoLibraryAuthorization {
-    
     __weak typeof (self) weakSelf = self;
-    [self checkPhotoLibraryAuthorization:^(BOOL isPermission) {
+    [self checkPhotoLibraryAuthorization:nil completion:^(BOOL isPermission) {
         if (!isPermission) {
             [weakSelf showSettingAlertWithAuth:@"相册" settingName:@"照片"];
         }
@@ -144,13 +157,14 @@
 
 
 
-+ (void)checkMicrophoneAuthorization:(void (^)(BOOL))completion {
++ (void)checkMicrophoneAuthorization:(void(^ __nullable)(void))firstRequestAccess completion:(void (^)(BOOL))completion {
     
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
 
     switch (authStatus) {
         case AVAuthorizationStatusNotDetermined: {
             //第一次提示用户授权
+            firstRequestAccess ? firstRequestAccess() : nil;
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
                 completion ? completion(granted) : nil;
             }];
@@ -179,7 +193,8 @@
 + (void)requestMicrophoneArthorization {
     
     __weak typeof (self) weakSelf = self;
-    [self checkMicrophoneAuthorization:^(BOOL isPermission) {
+    
+    [self checkMicrophoneAuthorization:nil completion:^(BOOL isPermission) {
         if (!isPermission) {
             [weakSelf showSettingAlertWithAuth:@"麦克风" settingName:@"麦克风"];
         }
