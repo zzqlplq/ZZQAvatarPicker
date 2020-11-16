@@ -116,6 +116,7 @@ ZZQResouceSheetViewDelegate>
         _imagePicker = [[UIImagePickerController alloc]init];
         _imagePicker.delegate = self;
         _imagePicker.allowsEditing = YES;
+        _imagePicker.view.backgroundColor = [UIColor whiteColor];
     }
     return _imagePicker;
 }
