@@ -142,6 +142,11 @@
             completion ? completion(YES) : nil;
         }
             break;
+            
+        case PHAuthorizationStatusLimited: {
+            
+        }
+            break;
     }
 }
 
